@@ -4,7 +4,7 @@ namespace App\Classes\PaymentProviders;
 
 use App\Interfaces\PaymentProvider;
 
-class Stripe implements PaymentProvider
+class Braintree implements PaymentProvider
 {
     public function setUpAccount()
     {

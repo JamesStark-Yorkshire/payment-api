@@ -19,4 +19,9 @@ class PaymentProvider extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    public function getProviderInstance(): \App\Interfaces\PaymentProvider
+    {
+        return app($this->class_Name);
+    }
 }

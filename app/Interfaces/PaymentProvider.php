@@ -4,5 +4,7 @@ namespace App\Interfaces;
 
 interface PaymentProvider
 {
-    public function listPaymentCard();
+//    public function setUpAccount();
+//
+//    public function listPaymentCard();
 }

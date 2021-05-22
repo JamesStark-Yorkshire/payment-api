@@ -3,17 +3,17 @@
 namespace Database\Factories;
 
 use App\Model;
-use App\Models\PaymentAccount;
+use App\Models\Account;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class PaymentAccountFactory extends Factory
+class AccountFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = PaymentAccount::class;
+    protected $model = Account::class;
 
     public function definition(): array
     {

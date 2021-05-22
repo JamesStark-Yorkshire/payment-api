@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAccountPaymentProviderTable extends Migration
+class CreateAccountPaymentProviderProfilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateAccountPaymentProviderTable extends Migration
      */
     public function up()
     {
-        Schema::create('account_payment_provider', function (Blueprint $table) {
+        Schema::create('account_payment_provider_profiles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('payment_provider_id')->constrained()->onUpdate('cascade');
-            $table->foreignId('payment_account_id')->constrained()->onUpdate('cascade');
+            $table->foreignId('account_id')->constrained()->cascadeOnUpdate();;
+            $table->foreignId('payment_provider_id')->constrained()->cascadeOnUpdate();;
             $table->string('external_account_id');
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ class CreateAccountPaymentProviderTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('account_payment_provider');
+        Schema::dropIfExists('account_payment_provider_profiles');
     }
 }

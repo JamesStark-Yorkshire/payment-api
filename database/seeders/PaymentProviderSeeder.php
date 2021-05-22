@@ -8,7 +8,8 @@ use Illuminate\Database\Seeder;
 class PaymentProviderSeeder extends Seeder
 {
     private $providers = [
-        'Stripe' => \App\Classes\PaymentProviders\Stripe::class
+        'Stripe' => \App\Classes\PaymentProviders\Stripe::class,
+        'Braintree' => \App\Classes\PaymentProviders\Braintree::class
     ];
 
     /**

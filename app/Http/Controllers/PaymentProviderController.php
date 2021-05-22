@@ -5,13 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\PaymentProvider;
 use Illuminate\Http\Request;
 
-/**
- * @OA\Info(
- *     title="My the best API",
- *     version="1.0.0"
- * )
- */
-
 class PaymentProviderController extends Controller
 {
     /**
@@ -53,7 +46,7 @@ class PaymentProviderController extends Controller
      */
     public function show(PaymentProvider $paymentProvider)
     {
-        //
+
     }
 
     /**

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePaymentAccountsTable extends Migration
+class CreateAccountsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreatePaymentAccountsTable extends Migration
      */
     public function up()
     {
-        Schema::create('payment_accounts', function (Blueprint $table) {
+        Schema::create('accounts', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid');
+            $table->uuid('uuid')->index();
+            $table->foreignId('default_payment_method_id')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -27,6 +29,6 @@ class CreatePaymentAccountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment_accounts');
+        Schema::dropIfExists('accounts');
     }
 }

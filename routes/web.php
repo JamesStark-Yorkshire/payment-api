@@ -17,4 +17,9 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('provider', 'index@PaymentProviderController');
+$router->group(['prefix' => 'account', 'as' => 'account'], function () use ($router) {
+    $router->get('/', ['as' => 'index', 'uses' => 'AccountController@index']);
+    $router->post('/', ['as' => 'store', 'uses' => 'AccountController@store']);
+    $router->get('/{uuid}', ['as' => 'show', 'uses' => 'AccountController@show']);
+    $router->delete('/{uuid}', ['as' => 'destroy', 'uses' => 'AccountController@destroy']);
+});

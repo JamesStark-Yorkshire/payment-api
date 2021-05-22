@@ -5,13 +5,13 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/api": {
+        "/account": {
             "get": {
-                "summary": "Display a listing of the resource.",
-                "operationId": "App\\Http\\Controllers\\PaymentProviderController::index",
+                "description": "Account",
+                "operationId": "App\\Http\\Controllers\\PaymentAccountController::index",
                 "responses": {
-                    "200": {
-                        "description": "Display a listing of projects."
+                    "default": {
+                        "description": "Welcome page"
                     }
                 }
             }
