@@ -8,7 +8,7 @@ class PaymentCard
 
     private int $expMonth;
 
-    private int $exp_year;
+    private int $expYear;
 
     private ?int $cvc;
 
@@ -16,15 +16,27 @@ class PaymentCard
      * PaymentCard constructor.
      * @param int $number
      * @param int $expMonth
-     * @param int $exp_year
+     * @param int $expYear
      * @param ?int $cvc
      */
-    public function __construct(int $number, int $expMonth, int $exp_year, int $cvc = null)
+    public function __construct(int $number, int $expMonth, int $expYear, int $cvc = null)
     {
         $this->number = $number;
         $this->expMonth = $expMonth;
-        $this->exp_year = $exp_year;
+        $this->expYear = $expYear;
         $this->cvc = $cvc;
+    }
+
+    public static function make(array $data): self
+    {
+        $paymentCard = new self(
+            data_get($data, 'number'),
+            data_get($data, 'exp_month'),
+            data_get($data, 'exp_year'),
+            data_get($data, 'cvc'),
+        );
+
+        return $paymentCard;
     }
 
     /**
@@ -48,7 +60,7 @@ class PaymentCard
      */
     public function getExpYear(): int
     {
-        return $this->exp_year;
+        return $this->expYear;
     }
 
     /**

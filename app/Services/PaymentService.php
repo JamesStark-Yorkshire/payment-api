@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Classes\Charge;
+use App\Classes\PaymentDetails;
 use App\Models\Transaction;
 use App\Models\PaymentProvider;
 
@@ -24,7 +24,7 @@ class PaymentService
             ->first();
     }
 
-    public function charge(Charge $charge): Transaction
+    public function charge(PaymentDetails $charge): Transaction
     {
         $this->getPaymentProvider();
 

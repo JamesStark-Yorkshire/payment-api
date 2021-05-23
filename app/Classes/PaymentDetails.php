@@ -5,7 +5,7 @@ namespace App\Classes;
 use App\Models\PaymentMethod;
 use App\Models\PaymentProvider;
 
-class Charge
+class PaymentDetails
 {
     private string $currency;
 
@@ -22,8 +22,17 @@ class Charge
      */
     public function __construct(int $amount, string $currency = null)
     {
-        $this->currency = $currency ?? config('payment.currency');
+        $this->currency = $currency ?? config('payment.default_currency');
         $this->amount = $amount;
+    }
+
+    public static function make(array $data): self
+    {
+        $paymentDetails = new self(
+            data_get($data, 'amount')
+        );
+
+        return $paymentDetails;
     }
 
     /**
@@ -53,7 +62,7 @@ class Charge
     /**
      * @return PaymentMethod|null
      */
-    public function getPaymentMethod():? PaymentMethod
+    public function getPaymentMethod(): ?PaymentMethod
     {
         return $this->paymentMethod;
     }
@@ -61,7 +70,7 @@ class Charge
     /**
      * @return PaymentCard|null
      */
-    public function getPaymentCard():? PaymentCard
+    public function getPaymentCard(): ?PaymentCard
     {
         return $this->paymentCard;
     }

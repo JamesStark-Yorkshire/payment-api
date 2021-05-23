@@ -24,3 +24,23 @@ Documentation for the framework can be found on the [Lumen website](https://lume
 | GET    | /payment/{uuid}            | payment.show                 |
 | PUT    | /payment/{uuid}            | payment.update               |
 | DELETE | /payment/{uuid}            | payment.destroy              |
+
+
+
+#### Create Payment
+
+Request
+
+```json
+{
+    "account_uuid": "b0cf1ad8-2c96-48c0-97a0-77529f1b16e1",
+    "payment_card": {
+        "number": "4242424242424242",
+        "exp_month": "04",
+        "exp_year": 2020,
+        "cvc": 232
+    },
+    "amount": 1000
+}
+```
+
