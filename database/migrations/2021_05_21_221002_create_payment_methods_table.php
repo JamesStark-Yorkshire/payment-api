@@ -15,7 +15,7 @@ class CreatePaymentMethodsTable extends Migration
     {
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid');
+            $table->uuid('uuid')->index();
             $table->foreignId('account_payment_provider_profile_id')
                 ->constrained('account_payment_provider_profiles')
                 ->onUpdate('cascade');

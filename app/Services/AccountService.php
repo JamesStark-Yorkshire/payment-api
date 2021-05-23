@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Account;
-use App\Models\PaymentProvider;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class AccountService
@@ -50,11 +49,6 @@ class AccountService
 
     public function setDefaultPaymentMethod()
     {
-
-    }
-
-    public function setUpPaymentProvider(Account $account, PaymentProvider $provider)
-    {
-
+        //
     }
 }

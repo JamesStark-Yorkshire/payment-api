@@ -6,7 +6,7 @@ use App\Interfaces\PaymentProvider;
 
 class Braintree implements PaymentProvider
 {
-    public function setUpAccount()
+    public function setUpAccount(array $payload = []): string
     {
         return;
     }

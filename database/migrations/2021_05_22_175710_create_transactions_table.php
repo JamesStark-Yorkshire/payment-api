@@ -15,16 +15,17 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->index();
             $table->foreignId('account_id')->constrained()->cascadeOnUpdate();
             $table->foreignId('payment_method_id')->constrained()->cascadeOnUpdate();
-            $table->foreignId('original_transaction_id')
+            $table->foreignId('parent_id')
                 ->nullable()
                 ->constrained('transactions')
                 ->cascadeOnUpdate();
             $table->char('type', 1);
-            $table->string('currency',3)->default('GBP');
+            $table->string('currency', 3)->default('GBP');
             $table->integer('amount');
-            $table->text('remark');
+            $table->text('remark')->nullable();
             $table->char('status', 1);
             $table->timestamps();
         });

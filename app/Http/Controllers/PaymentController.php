@@ -4,20 +4,35 @@ namespace App\Http\Controllers;
 
 use App\Classes\PaymentCard;
 use App\Classes\PaymentDetails;
+use App\Models\Account;
 use App\Models\PaymentMethod;
+use App\Models\Transaction;
+use App\Services\AccountService;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class PaymentController extends Controller
 {
     private PaymentService $paymentService;
 
+    private AccountService $accountService;
+
     /**
      * PaymentController constructor.
      */
-    public function __construct(PaymentService $paymentService)
+    public function __construct(PaymentService $paymentService, AccountService $accountService)
     {
         $this->paymentService = $paymentService;
+        $this->accountService = $accountService;
+    }
+
+    public function show(string $uuid)
+    {
+        // Get Transaction
+        $transaction = $this->paymentService->getTransaction($uuid);
+
+        return response()->json($transaction);
     }
 
     public function store(Request $request)
@@ -33,6 +48,10 @@ class PaymentController extends Controller
             'amount' => ['required', 'integer']
         ]);
 
+        // Fetch account
+        $account = $this->accountService->getAccount($data['account_uuid']);
+
+        // Create Payment details
         $paymentDetails = PaymentDetails::make($data);
 
         // Set Payment Method
@@ -41,7 +60,21 @@ class PaymentController extends Controller
         } else {
             $paymentDetails->setPaymentCard(PaymentCard::make($data['payment_card']));
         }
+        $transaction = $this->paymentService->charge($account, $paymentDetails);
 
-        $this->paymentService->charge($paymentDetails);
+        return response()->json($transaction);
+    }
+
+    public function refund(Request $request, string $uuid)
+    {
+        $data = $this->validate($request, [
+            'amount' => ['integer', 'min:1']
+        ]);
+
+        $transaction = $this->paymentService->getTransaction($uuid);
+
+        $refund = $this->paymentService->refund($transaction, data_get($data, 'amount'));
+
+        return response()->json($refund, Response::HTTP_CREATED);
     }
 }

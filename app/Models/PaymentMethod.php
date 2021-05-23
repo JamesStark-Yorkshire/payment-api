@@ -16,7 +16,12 @@ class PaymentMethod extends Model
      *
      * @var array
      */
-    protected $fillable = ['account_payment_provider_profile_id', 'external_id', 'card_type', 'last4'];
+    protected $fillable = [
+        'account_payment_provider_profile_id',
+        'external_id',
+        'card_type',
+        'last4'
+    ];
 
     public function accountPaymentProvider()
     {

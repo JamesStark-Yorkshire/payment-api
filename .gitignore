@@ -7,3 +7,4 @@ Homestead.yaml
 .editorconfig
 .styleci.yml
 composer.lock
+.php-cs-fixer.cache

@@ -28,5 +28,5 @@ $router->group(['prefix' => 'payment', 'as' => 'payment'], function () use ($rou
     $router->get('/', ['as' => 'index', 'uses' => 'PaymentController@index']);
     $router->post('/', ['as' => 'store', 'uses' => 'PaymentController@store']);
     $router->get('/{uuid}', ['as' => 'show', 'uses' => 'PaymentController@show']);
-    $router->delete('/{uuid}', ['as' => 'destroy', 'uses' => 'PaymentController@destroy']);
+    $router->post('/{uuid}/refund', ['as' => 'refund', 'uses' => 'PaymentController@refund']);
 });
