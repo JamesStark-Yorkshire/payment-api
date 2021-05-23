@@ -7,8 +7,10 @@ use App\Classes\PaymentDetails;
 use App\Models\Account;
 use App\Models\AccountPaymentProviderProfile;
 use App\Models\PaymentMethod;
-use App\Models\Transaction;
 use App\Models\PaymentProvider;
+use App\Models\Transaction;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class PaymentService
 {
@@ -29,6 +31,20 @@ class PaymentService
             ->first();
     }
 
+    /**
+     * Get account's transaction
+     *
+     * @param int $perPage
+     * @return LengthAwarePaginator
+     */
+    public function getAccountsTransactions(Account $account, int $perPage = 20): LengthAwarePaginator
+    {
+        return $account->append('charged')
+            ->transactions()
+            ->whereNull('parent_id')
+            ->paginate($perPage);
+    }
+
     public function charge(Account $account, PaymentDetails $paymentDetails, string $remark = null): Transaction
     {
         // Setup payment card if payment method is not attached
@@ -42,11 +58,11 @@ class PaymentService
 
         $transaction = $account->transactions()
             ->make([
-                'type' => array_search('payment', Transaction::PAYMENT_TYPES),
+                'type' => Transaction::PAYMENT_TYPE_PAYMENT,
                 'currency' => $paymentDetails->getCurrency(),
                 'amount' => $paymentDetails->getAmount(),
                 'remark' => $remark,
-                'status' => array_search('success', Transaction::PAYMENT_STATUS),
+                'status' => Transaction::PAYMENT_STATUS_SUCCESS
             ]);
 
         $transaction->paymentMethod()->associate($paymentDetails->getPaymentMethod());
@@ -68,16 +84,17 @@ class PaymentService
         }
 
         $refund->fill([
-            'type' => array_search('refund', Transaction::PAYMENT_TYPES),
+            'type' => Transaction::PAYMENT_TYPE_REFUND,
             'amount' => -abs($amount),
             'remark' => 'Refund: ' . $transaction->remark,
-            'status' => array_search('success', Transaction::PAYMENT_STATUS),
+            'status' => Transaction::PAYMENT_STATUS_SUCCESS,
         ]);
 
         $transaction->children()->save($refund);
+        $transaction->save();
 
-        $refund->unsetRelation('children');
         $refund->load('parent');
+        $refund->makeHidden('children');
 
         return $refund;
     }

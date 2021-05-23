@@ -27,6 +27,17 @@ class PaymentController extends Controller
         $this->accountService = $accountService;
     }
 
+    public function index(Request $request)
+    {
+        $uuid = $request->input('account_uuid');
+
+        $account = $this->accountService->getAccount($uuid);
+
+        $transactions = $this->paymentService->getAccountsTransactions($account);
+
+        return response()->json($transactions);
+    }
+
     public function show(string $uuid)
     {
         // Get Transaction
