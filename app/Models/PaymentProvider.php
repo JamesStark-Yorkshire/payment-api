@@ -20,8 +20,8 @@ class PaymentProvider extends Model
      */
     public $timestamps = false;
 
-    public function getProviderInstance(): \App\Interfaces\PaymentProvider
+    public function getProviderInstance(): \App\Interfaces\PaymentProviderInterface
     {
-        return app($this->class_Name);
+        return app($this->class_name);
     }
 }

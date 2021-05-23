@@ -20,7 +20,8 @@ class PaymentMethod extends Model
         'account_payment_provider_profile_id',
         'external_id',
         'card_type',
-        'last4'
+        'last4',
+        'cvc'
     ];
 
     public function accountPaymentProvider()

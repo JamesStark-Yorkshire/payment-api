@@ -2,12 +2,13 @@
 
 namespace App\Services;
 
+use App\Classes\PaymentCard;
 use App\Classes\PaymentDetails;
 use App\Models\Account;
 use App\Models\AccountPaymentProviderProfile;
+use App\Models\PaymentMethod;
 use App\Models\Transaction;
 use App\Models\PaymentProvider;
-use Illuminate\Support\Str;
 
 class PaymentService
 {
@@ -35,6 +36,8 @@ class PaymentService
             $paymentProvider = $this->getPaymentProvider();
 
             $profile = $this->setUpPaymentProvider($account, $paymentProvider);
+            $paymentMethod = $this->setUpPaymentMethod($paymentDetails->getPaymentCard(), $profile);
+            $paymentDetails->setPaymentMethod($paymentMethod);
         }
 
         $transaction = $account->transactions()
@@ -49,6 +52,7 @@ class PaymentService
         $transaction->paymentMethod()->associate($paymentDetails->getPaymentMethod());
 
         $transaction->save();
+        $transaction->append('charged');
 
         return $transaction;
     }
@@ -98,7 +102,6 @@ class PaymentService
         return null;
     }
 
-
     /**
      * Setup Payment Provider on account if it wasn't existed
      *
@@ -123,6 +126,27 @@ class PaymentService
         }
 
         return $profile;
+    }
+
+    private function setUpPaymentMethod(
+        PaymentCard $paymentCard,
+        AccountPaymentProviderProfile $profile
+    ): ?PaymentMethod {
+        $instance = $profile->paymentProvider->getProviderInstance();
+
+        $instance->addPaymentCard($paymentCard, $profile);
+
+        if ($paymentCard->isCreated()) {
+            $paymentMethod = $profile->paymentMethods()
+                ->create([
+                    'card_type' => 'debit',
+                    'last4' => $paymentCard->getCvc()
+                ]);
+
+            return $paymentMethod;
+        }
+
+        return null;
     }
 
     /**

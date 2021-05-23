@@ -41,6 +41,7 @@ class PaymentDetails
     public function setPaymentMethod(PaymentMethod $paymentMethod): void
     {
         $this->paymentMethod = $paymentMethod;
+        $this->paymentCard = null;
     }
 
     /**
@@ -81,5 +82,6 @@ class PaymentDetails
     public function setPaymentCard(PaymentCard $paymentCard): void
     {
         $this->paymentCard = $paymentCard;
+        $this->paymentMethod = null;
     }
 }

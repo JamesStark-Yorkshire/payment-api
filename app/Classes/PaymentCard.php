@@ -4,22 +4,27 @@ namespace App\Classes;
 
 class PaymentCard
 {
-    private int $number;
+    /**
+     * @var string|null Provider's Payment Method ID
+     */
+    private ?string $externalId;
 
-    private int $expMonth;
+    private string $number;
 
-    private int $expYear;
+    private string $expMonth;
 
-    private ?int $cvc;
+    private string $expYear;
+
+    private ?string $cvc;
 
     /**
      * PaymentCard constructor.
-     * @param int $number
-     * @param int $expMonth
-     * @param int $expYear
-     * @param ?int $cvc
+     * @param string $number
+     * @param string $expMonth
+     * @param string $expYear
+     * @param string|null $cvc
      */
-    public function __construct(int $number, int $expMonth, int $expYear, int $cvc = null)
+    public function __construct(string $number, string $expMonth, string $expYear, string $cvc = null)
     {
         $this->number = $number;
         $this->expMonth = $expMonth;
@@ -48,26 +53,57 @@ class PaymentCard
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getExpMonth(): int
+    public function getExpMonth(): string
     {
         return $this->expMonth;
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getExpYear(): int
+    public function getExpYear(): string
     {
         return $this->expYear;
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getCvc(): int
+    public function getCvc(): string
     {
         return $this->cvc;
+    }
+
+    public function getLast4(): string
+    {
+        return substr($this->number, -4);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getExternalId(): ?string
+    {
+        return $this->externalId;
+    }
+
+    /**
+     * @param string|null $externalId
+     */
+    public function setExternalId(?string $externalId): void
+    {
+        $this->externalId = $externalId;
+    }
+
+    /**
+     * Return if Payment Card is created on provider
+     *
+     * @return bool
+     */
+    public function isCreated(): bool
+    {
+        return isset($this->externalId);
     }
 }
