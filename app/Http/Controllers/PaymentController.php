@@ -11,6 +11,7 @@ use App\Services\AccountService;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PaymentController extends Controller
 {
@@ -84,7 +85,11 @@ class PaymentController extends Controller
 
         $transaction = $this->paymentService->getTransaction($uuid);
 
-        $refund = $this->paymentService->refund($transaction, data_get($data, 'amount'));
+        try {
+            $refund = $this->paymentService->refund($transaction, data_get($data, 'amount'));
+        } catch (\Exception $exception) {
+            throw new HttpException(Response::HTTP_BAD_REQUEST, $exception->getMessage());
+        }
 
         return response()->json($refund, Response::HTTP_CREATED);
     }

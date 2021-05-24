@@ -9,8 +9,10 @@ use App\Models\AccountPaymentProviderProfile;
 use App\Models\PaymentMethod;
 use App\Models\PaymentProvider;
 use App\Models\Transaction;
+use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PaymentService
 {
@@ -80,7 +82,7 @@ class PaymentService
         $amount = $this->getRefundAmount($transaction, $amount);
 
         if ($amount <= 0) {
-            throw new \Exception('Incorrect refund amount or already refunded');
+            throw new \Exception('Incorrect refund amount or already refunded.');
         }
 
         $refund->fill([

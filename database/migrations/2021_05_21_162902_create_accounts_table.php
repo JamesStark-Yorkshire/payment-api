@@ -16,7 +16,7 @@ class CreateAccountsTable extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->index();
-            $table->foreignId('default_payment_method_id')->nullable();
+            $table->foreignId('default_payment_method_id')->index()->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

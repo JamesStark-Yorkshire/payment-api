@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Dyrynda\Database\Support\GeneratesUuid;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Transaction extends Model
 {
-    use GeneratesUuid;
+    use HasFactory,
+        GeneratesUuid;
 
     /**
      * Payment types

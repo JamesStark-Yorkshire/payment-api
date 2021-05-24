@@ -17,7 +17,7 @@ class Stripe implements PaymentProviderInterface
      */
     public function setUpAccount(array $payload = []): string
     {
-        return Str::uuid();
+        return 'cus_' . Str::random();
     }
 
     /**

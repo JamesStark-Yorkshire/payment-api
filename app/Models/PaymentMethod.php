@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Dyrynda\Database\Support\GeneratesUuid;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PaymentMethod extends Model
 {
     use SoftDeletes,
+        HasFactory,
         GeneratesUuid;
 
     /**
@@ -24,7 +26,7 @@ class PaymentMethod extends Model
         'cvc'
     ];
 
-    public function accountPaymentProvider()
+    public function accountPaymentProviderProfile()
     {
         return $this->belongsTo(AccountPaymentProviderProfile::class);
     }

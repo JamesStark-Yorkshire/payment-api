@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Account;
+use App\Models\Transaction;
+use Illuminate\Http\Response;
 
 class PaymentControllerTest extends TestCase
 {
@@ -38,5 +40,32 @@ class PaymentControllerTest extends TestCase
             'status' => 'success',
             'amount' => 1000
         ])->assertResponseOk();
+    }
+
+    public function testRefund()
+    {
+        $account = Account::First();
+        $paymentMethod = $account->paymentMethods()->inRandomOrder()->first();
+
+        $transaction = Transaction::factory(['amount' => 1000])->make();
+        $transaction->paymentMethod()->associate($paymentMethod);
+        $transaction->account()->associate($account);
+        $transaction->save();
+
+        // Test refund
+        $this->json('POST', 'payment/' . $transaction->uuid . '/refund', [
+            'amount' => 500, //  Amount of the transaction, in pence.
+        ])->seeJsonContains([
+            'type' => 'refund',
+            'currency' => 'GBP',
+            'status' => 'success',
+            'amount' => -500
+        ])->assertResponseStatus(201);
+
+        // Test failing refund - incorrect amount
+        $this->json('POST', 'payment/' . $transaction->uuid . '/refund', [
+            'amount' => 1000, //  Amount of the transaction, in pence.
+        ])->seeJsonContains(['message' => 'Incorrect refund amount or already refunded.'])
+            ->assertResponseStatus(Response::HTTP_BAD_REQUEST);
     }
 }

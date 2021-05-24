@@ -5,10 +5,19 @@
 Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
 
 ## Installation and Configuration
-### Docker
-```
+### Using Docker
+You should have docker setup on your computer already.
+
+Bring up the application
+```shell
 docker-compose up
 ```
+Setting up database
+```shell
+docker exec -it paymentapi_app_1 php artisan migrate:fresh --seed
+```
+
+Default URL: http://localhost:8000
 
 ## Endpoints
 

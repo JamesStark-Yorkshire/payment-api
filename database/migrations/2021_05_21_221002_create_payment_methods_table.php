@@ -19,7 +19,7 @@ class CreatePaymentMethodsTable extends Migration
             $table->foreignId('account_payment_provider_profile_id')
                 ->constrained('account_payment_provider_profiles')
                 ->onUpdate('cascade');
-            $table->string('external_id')->nullable();
+            $table->string('external_id')->index()->nullable();
             $table->string('card_type');
             $table->unsignedSmallInteger('last4');
             $table->timestamps();

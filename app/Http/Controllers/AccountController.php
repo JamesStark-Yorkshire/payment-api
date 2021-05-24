@@ -47,11 +47,6 @@ class AccountController extends Controller
         return response()->json($paymentAccount);
     }
 
-    public function update(string $uuid)
-    {
-
-    }
-
     public function destroy(string $uuid)
     {
         $paymentAccount = $this->accountService->getAccount($uuid);
