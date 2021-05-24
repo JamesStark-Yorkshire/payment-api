@@ -24,6 +24,12 @@ $router->group(['prefix' => 'account', 'as' => 'account'], function () use ($rou
     $router->delete('/{uuid}', ['as' => 'destroy', 'uses' => 'AccountController@destroy']);
 });
 
+$router->group(['prefix' => 'payment_method', 'as' => 'payment_method'], function () use ($router) {
+    $router->post('/', ['as' => 'store', 'uses' => 'PaymentMethodController@store']);
+    $router->get('/{uuid}', ['as' => 'show', 'uses' => 'PaymentMethodController@show']);
+    $router->delete('/{uuid}', ['as' => 'destroy', 'uses' => 'PaymentMethodController@destroy']);
+});
+
 $router->group(['prefix' => 'payment', 'as' => 'payment'], function () use ($router) {
     $router->get('/', ['as' => 'index', 'uses' => 'PaymentController@index']);
     $router->post('/', ['as' => 'store', 'uses' => 'PaymentController@store']);

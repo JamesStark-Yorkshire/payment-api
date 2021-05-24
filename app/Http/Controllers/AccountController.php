@@ -33,6 +33,11 @@ class AccountController extends Controller
         return response()->json($accounts);
     }
 
+    /**
+     * Create account
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store()
     {
         $paymentAccount = $this->accountService->createAccount();
@@ -40,6 +45,12 @@ class AccountController extends Controller
         return response()->json($paymentAccount, Response::HTTP_CREATED);
     }
 
+    /**
+     * Get account
+     *
+     * @param string $uuid
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show(string $uuid)
     {
         $paymentAccount = $this->accountService->getAccount($uuid);
@@ -47,15 +58,21 @@ class AccountController extends Controller
         return response()->json($paymentAccount);
     }
 
+    /**
+     * Remove account
+     *
+     * @param string $uuid
+     * @return mixed
+     */
     public function destroy(string $uuid)
     {
         $paymentAccount = $this->accountService->getAccount($uuid);
 
         if ($paymentAccount) {
             $paymentAccount->delete();
-            return $this->json($paymentAccount, Response::HTTP_ACCEPTED);
+            return resposne()->json($paymentAccount, Response::HTTP_ACCEPTED);
         }
 
-        return $this->json(['status' => false], Response::HTTP_NO_CONTENT);
+        return resposne()->json(['status' => false], Response::HTTP_NO_CONTENT);
     }
 }

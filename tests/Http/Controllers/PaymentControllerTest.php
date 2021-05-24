@@ -6,6 +6,24 @@ use Illuminate\Http\Response;
 
 class PaymentControllerTest extends TestCase
 {
+    public function testGetAccountsPayment()
+    {
+        $account = Account::First();
+        $transaction = $account->transactions()->first();
+
+        $this->json('GET', 'payment/', ['account_uuid' => $account->uuid])
+            ->seeJsonStructure([
+                'current_page',
+                'data',
+                'first_page_url'
+            ])
+            ->seeJsonContains([
+                'uuid' => $transaction->uuid,
+                'amount' => $transaction->amount
+            ])
+            ->assertResponseOk();
+    }
+
     public function testChargeWithPaymentMethod()
     {
         $account = Account::First();

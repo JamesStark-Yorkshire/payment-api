@@ -9,10 +9,7 @@ use App\Models\AccountPaymentProviderProfile;
 use App\Models\PaymentMethod;
 use App\Models\PaymentProvider;
 use App\Models\Transaction;
-use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PaymentService
 {
@@ -122,16 +119,39 @@ class PaymentService
     }
 
     /**
+     * Get Payment Method
+     *
+     * @param string $uuid
+     * @return PaymentMethod
+     */
+    public function getPaymentMethod(string $uuid):? PaymentMethod
+    {
+        $paymentMethod = PaymentMethod::whereUuid($uuid)
+            ->firstOrFail();
+
+        if ($paymentMethod instanceof PaymentMethod) {
+            return $paymentMethod;
+        }
+
+        return null;
+    }
+
+    /**
      * Setup Payment Provider on account if it wasn't existed
      *
      * @param Account $account
-     * @param PaymentProvider $paymentProvider
+     * @param PaymentProvider|null $paymentProvider
      * @return AccountPaymentProviderProfile
      */
     public function setUpPaymentProvider(
         Account $account,
-        PaymentProvider $paymentProvider
+        PaymentProvider $paymentProvider = null
     ): AccountPaymentProviderProfile {
+
+        if (!$paymentProvider) {
+            $paymentProvider = $this->getPaymentProvider();
+        }
+
         $profile = $account->paymentProviderProfiles()
             ->where('payment_provider_id', $paymentProvider->getKey())
             ->first();
@@ -147,17 +167,18 @@ class PaymentService
         return $profile;
     }
 
-    private function setUpPaymentMethod(
+    public function setUpPaymentMethod(
         PaymentCard $paymentCard,
         AccountPaymentProviderProfile $profile
     ): ?PaymentMethod {
         $instance = $profile->paymentProvider->getProviderInstance();
 
-        $instance->addPaymentCard($paymentCard, $profile);
+        $card = $instance->addPaymentCard($paymentCard, $profile);
 
         if ($paymentCard->isCreated()) {
             $paymentMethod = $profile->paymentMethods()
                 ->create([
+                    'external_id' => $card->getExternalId(),
                     'card_type' => 'debit',
                     'last4' => $paymentCard->getCvc()
                 ]);
