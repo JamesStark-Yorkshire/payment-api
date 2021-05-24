@@ -9,7 +9,9 @@ use App\Models\AccountPaymentProviderProfile;
 use App\Models\PaymentMethod;
 use App\Models\PaymentProvider;
 use App\Models\Transaction;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Str;
 
 class PaymentService
 {
@@ -31,16 +33,33 @@ class PaymentService
     }
 
     /**
-     * Get account's transaction
+     * Get transaction
      *
+     * @param array $filter
      * @param int $perPage
      * @return LengthAwarePaginator
      */
-    public function getAccountsTransactions(Account $account, int $perPage = 20): LengthAwarePaginator
+    public function getTransactions(array $filter = [], int $perPage = 20): LengthAwarePaginator
     {
-        return $account->append('charged')
-            ->transactions()
+        return Transaction::query()
             ->whereNull('parent_id')
+            ->when(!empty($filter), function (Builder $query) use ($filter) {
+                // Account Filter
+                if ($accountUuid = data_get($filter, 'account_uuid')) {
+                    $query->whereHas('account', function (Builder $query) use ($accountUuid) {
+                        $query->where('uuid', $accountUuid);
+                    });
+                }
+                // Payment status filter (Does not support refunded payment)
+                if ($status = data_get($filter, 'status')) {
+                    $constName = Transaction::class . '::PAYMENT_STATUS_' . Str::upper($status);
+                    if (defined($constName)) {
+                        $status = constant($constName);
+                    }
+
+                    $query->where('status', $status);
+                }
+            })
             ->paginate($perPage);
     }
 
@@ -124,7 +143,7 @@ class PaymentService
      * @param string $uuid
      * @return PaymentMethod
      */
-    public function getPaymentMethod(string $uuid):? PaymentMethod
+    public function getPaymentMethod(string $uuid): ?PaymentMethod
     {
         $paymentMethod = PaymentMethod::whereUuid($uuid)
             ->firstOrFail();

@@ -38,7 +38,7 @@ class AccountService
     {
         $account = Account::whereUuid($uuid)
             ->with(['PaymentMethods'])
-            ->firstOrFail();
+            ->first();
 
         if ($account instanceof Account) {
             return $account;

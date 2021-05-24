@@ -28,17 +28,53 @@ class PaymentController extends Controller
         $this->accountService = $accountService;
     }
 
+    /**
+     * @OA\Get(
+     *     path="/payment",
+     *     description="List payment of an account",
+     *     tags={"payment"},
+     *     @OA\Parameter(
+     *         name="account_uuid",
+     *         in="query",
+     *         description="Account's UUID",
+     *         required=false
+     *     ),
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Payment status",
+     *         required=false
+     *     ),
+     *     @OA\Response(response="default", description="List of payment")
+     * )
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
-        $uuid = $request->input('account_uuid');
+        $filter = $request->input();
 
-        $account = $this->accountService->getAccount($uuid);
-
-        $transactions = $this->paymentService->getAccountsTransactions($account);
+        $transactions = $this->paymentService->getTransactions($filter);
 
         return response()->json($transactions);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/payment/{uuid}",
+     *     description="Get specific payment",
+     *     tags={"payment"},
+     *     @OA\Parameter(
+     *         name="uuid",
+     *         in="query",
+     *         description="Transaction's UUID",
+     *         required=true
+     *     ),
+     *     @OA\Response(response="default", description="Get specific payment")
+     * )
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show(string $uuid)
     {
         // Get Transaction

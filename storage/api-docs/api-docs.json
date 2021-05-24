@@ -1,17 +1,124 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "My the best API",
-        "version": "1.0.0"
+        "title": "Payment API",
+        "version": "0.0.1"
     },
     "paths": {
         "/account": {
             "get": {
-                "description": "Account",
-                "operationId": "App\\Http\\Controllers\\PaymentAccountController::index",
+                "tags": [
+                    "account"
+                ],
+                "description": "List account",
+                "operationId": "App\\Http\\Controllers\\AccountController::index",
                 "responses": {
                     "default": {
-                        "description": "Welcome page"
+                        "description": "List account"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "account"
+                ],
+                "description": "Create account",
+                "operationId": "App\\Http\\Controllers\\AccountController::store",
+                "responses": {
+                    "default": {
+                        "description": "Create account"
+                    }
+                }
+            }
+        },
+        "/account/{uuid}": {
+            "get": {
+                "tags": [
+                    "account"
+                ],
+                "description": "Get account along with their payment methods",
+                "operationId": "App\\Http\\Controllers\\AccountController::show",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "Account's UUID",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "Get account"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "account"
+                ],
+                "description": "Remove account",
+                "operationId": "App\\Http\\Controllers\\AccountController::destroy",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "Account's UUID",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "Remove account"
+                    }
+                }
+            }
+        },
+        "/payment": {
+            "get": {
+                "tags": [
+                    "payment"
+                ],
+                "description": "List payment of an account",
+                "operationId": "App\\Http\\Controllers\\PaymentController::index",
+                "parameters": [
+                    {
+                        "name": "account_uuid",
+                        "in": "query",
+                        "description": "Account's UUID",
+                        "required": false
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Payment status",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "List of payment"
+                    }
+                }
+            }
+        },
+        "/payment/{uuid}": {
+            "get": {
+                "tags": [
+                    "payment"
+                ],
+                "description": "Get specific payment",
+                "operationId": "App\\Http\\Controllers\\PaymentController::show",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "query",
+                        "description": "Transaction's UUID",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "Get specific payment"
                     }
                 }
             }

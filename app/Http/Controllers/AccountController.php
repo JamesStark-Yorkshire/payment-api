@@ -17,11 +17,11 @@ class AccountController extends Controller
     }
 
     /**
-     *
      * @OA\Get(
      *     path="/account",
-     *     description="Account",
-     *     @OA\Response(response="default", description="Welcome page")
+     *     description="List account",
+     *     tags={"account"},
+     *     @OA\Response(response="default", description="List account")
      * )
      *
      * @return \Illuminate\Http\JsonResponse
@@ -34,7 +34,12 @@ class AccountController extends Controller
     }
 
     /**
-     * Create account
+     * @OA\Post(
+     *     path="/account",
+     *     description="Create account",
+     *     tags={"account"},
+     *     @OA\Response(response="default", description="Create account")
+     * )
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -46,7 +51,18 @@ class AccountController extends Controller
     }
 
     /**
-     * Get account
+     * @OA\Get(
+     *     path="/account/{uuid}",
+     *     description="Get account along with their payment methods",
+     *     tags={"account"},
+     *     @OA\Parameter(
+     *         name="uuid",
+     *         in="path",
+     *         description="Account's UUID",
+     *         required=true
+     *     ),
+     *     @OA\Response(response="default", description="Get account")
+     * )
      *
      * @param string $uuid
      * @return \Illuminate\Http\JsonResponse
@@ -59,7 +75,18 @@ class AccountController extends Controller
     }
 
     /**
-     * Remove account
+     * @OA\Delete(
+     *     path="/account/{uuid}",
+     *     description="Remove account",
+     *     tags={"account"},
+     *     @OA\Parameter(
+     *         name="uuid",
+     *         in="path",
+     *         description="Account's UUID",
+     *         required=true
+     *     ),
+     *     @OA\Response(response="default", description="Remove account")
+     * )
      *
      * @param string $uuid
      * @return mixed
@@ -70,9 +97,9 @@ class AccountController extends Controller
 
         if ($paymentAccount) {
             $paymentAccount->delete();
-            return resposne()->json($paymentAccount, Response::HTTP_ACCEPTED);
+            return response()->json($paymentAccount, Response::HTTP_ACCEPTED);
         }
 
-        return resposne()->json(['status' => false], Response::HTTP_NO_CONTENT);
+        return response()->json(['status' => false], Response::HTTP_NO_CONTENT);
     }
 }

@@ -12,14 +12,21 @@ Bring up the application
 ```shell
 docker-compose up
 ```
+
+Wait until the database is up and running before the next step
+
 Setting up database
 ```shell
 docker exec -it paymentapi_app_1 php artisan migrate:fresh --seed
 ```
-
 Default URL: http://localhost:8000
 
+PS: If experiencing error when running the solution in docker, it may down to directory permission settings. The project only tested on the least copy of openSUSE Tumbleweed.
+
 ## Endpoints
+
+### Swagger Documentation
+http://localhost:8000/api/documentation
 
 ### Account
 
@@ -38,6 +45,14 @@ Default URL: http://localhost:8000
 | POST   | /payment                   | Create payment             |
 | GET    | /payment/{uuid}            | Get a payment               |
 | POST    | /payment/{uuid}/refund     | Refund a payment             |
+
+### Payment Method
+
+| HTTP Method  | Path                | Description                  |
+|--------|----------------------------|------------------------------|
+| POST   | /payment_method                   | Create payment method           |
+| GET    | /payment_method/{uuid}            | Get a payment method               |
+| DELETE    | /payment_method/{uuid}     | Remove a payment method             |
 
 #### Create Payment
 
