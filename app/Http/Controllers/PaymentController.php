@@ -83,6 +83,36 @@ class PaymentController extends Controller
         return response()->json($transaction);
     }
 
+    /**
+     * [In Completed document]
+     * @OA\Post(
+     *     path="/payment",
+     *     description="Making payment",
+     *     tags={"payment"},
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="account_uuid",
+     *                     type="string",
+     *                     format="uuid",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="payment_method_uuid",
+     *                     type="string",
+     *                     format="uuid",
+     *                 ),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response="default", description="Transaction")
+     * )
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function store(Request $request)
     {
         $data = $this->validate($request, [
@@ -113,6 +143,12 @@ class PaymentController extends Controller
         return response()->json($transaction);
     }
 
+    /**
+     * @param Request $request
+     * @param string $uuid
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function refund(Request $request, string $uuid)
     {
         $data = $this->validate($request, [

@@ -99,6 +99,37 @@
                         "description": "List of payment"
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "payment"
+                ],
+                "description": "Making payment",
+                "operationId": "App\\Http\\Controllers\\PaymentController::store",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "account_uuid": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    },
+                                    "payment_method_uuid": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "default": {
+                        "description": "Transaction"
+                    }
+                }
             }
         },
         "/payment/{uuid}": {
