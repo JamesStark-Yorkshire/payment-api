@@ -142,7 +142,7 @@ http://localhost:8000/api/documentation
         "external_id": null,
         "card_type": "visa",
         "last4": 1223,
-        "created_at": "2021-05-23T19:20:31.000000Z",-
+        "created_at": "2021-05-23T19:20:31.000000Z",
         "updated_at": "2021-05-23T19:20:31.000000Z",
         "deleted_at": null
     },
